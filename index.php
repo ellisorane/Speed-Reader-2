@@ -6,22 +6,31 @@ include "classes/Pdf.php";
 require 'vendor/autoload.php';
 session_start();
 
+// $uploaded_file = ''; 
+// $pagesArr = '';
+// $file_path = '';
+$nl = "<br>";
 
 if($_SERVER['REQUEST_METHOD'] === "POST") {
+    $file_type = '';
 
     if(isset($_POST['convert_file'])) {
         
         // Get uploaded file
         $uploaded_file = $_FILES['uploaded_file'];
         // var_dump($uploaded_file['type']);
-        // Get file name and then remove the .pdf extension
+        // Get file type. Later used in the 'Converted Text' section on the webpage - 'application/pdf'
+        $file_type = $uploaded_file['type'];
+        // Get file's temporary storage location
         $file_path = $uploaded_file['tmp_name'];
+        // echo $file_path;
+        // Get file name and then remove the .pdf extension (May need this later on)
         $filename = pathinfo($uploaded_file['name'], PATHINFO_FILENAME);
 
         // Convert pdf file  to text
         if($uploaded_file['type'] === 'application/pdf') {
     
-            // Use PDF Parser
+            // Use Smalot PDF Parser
             $parser = new \Smalot\PdfParser\Parser();
             $pdf = $parser->parseFile($file_path);
     
@@ -45,14 +54,15 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
                     // XHTML content is usually in OEBPS/*.xhtml or *.html
                     if (preg_match('/\.(xhtml|html)$/', $file['name'])) {
                         $content = $epub->getFromIndex($i);
-                        $text .= strip_tags("PAGE-" . $i + 1 . " " . $content); // remove HTML
+                        // $text .= strip_tags("PAGE-" . $i + 1 . " " . $content); // remove HTML
+                        // $text .= "<br><br>";
+                        $pagesArr[] = strip_tags($content); // remove HTML
                     }
-                    $text .= "<br><br>";
                 }
                 $epub->close();
             }
 
-            echo $text;
+            // print_r($pagesArr);
 
         }
 
@@ -60,7 +70,10 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
             echo "File type not supported.";
             $pagesArr = [];
         }
+
+
     }
+
 
 }
 ?>
@@ -69,7 +82,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
 
 <!-- Upload file to convert to text -->
 <form action="" method="post" enctype="multipart/form-data">
-    <label for="file"><strong>Add pdf</strong></label><br><br>
+    <label for="file"><strong>Add a doc</strong></label><br><br>
     <input type="file" name="uploaded_file" id="uploaded_file" name="uploaded_file"><br><br>
     <input type="submit" name="convert_file" value="Convert file">
 </form>
@@ -92,13 +105,23 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
 
             foreach($pagesArr as $page) {
                 $pagesArrIndex++;
-                $unclean_text = $page->getText(); 
-                // Only show letters, numbers, punctuation (.,!?), and spaces
-                $text = preg_replace('/[^a-zA-Z0-9 .,!?\-]/', '', $unclean_text);
-                echo "PAGE-" . $pagesArrIndex . " " . $text . "<br><br>";
+                // PDFs
+                if ($file_type === 'application/pdf') {
+                    $unclean_text = $page->getText(); 
+                    // Only show letters, numbers, punctuation (.,!?), and spaces
+                    $text = preg_replace('/[^a-zA-Z0-9 .,!?\-]/', '', $unclean_text);
+                    echo "PAGE-" . $pagesArrIndex . " " . $text . $nl . $nl;
+                }
+                // EPUBs
+                elseif ($file_type == 'application/epub+zip') {
+                    echo "PAGE-" . $pagesArrIndex . " " . $page . $nl . $nl;
+                }
             }
          ?>
     </div>
+
+<?php } else { ?>
+    <p>Upload your pdf or epub document to begin reading.</p>
 
 <?php } ?>
 
