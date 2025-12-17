@@ -7,14 +7,14 @@ require 'vendor/autoload.php';
 session_start();
 
 // $uploaded_file = ''; 
-// $pagesArr = '';
 // $file_path = '';
+$pagesArr = [];
 $nl = "<br>";
 
 if($_SERVER['REQUEST_METHOD'] === "POST") {
-    $file_type = '';
-
+    
     if(isset($_POST['convert_file'])) {
+        $file_type = '';
         
         // Get uploaded file
         $uploaded_file = $_FILES['uploaded_file'];
@@ -62,10 +62,8 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
                 $epub->close();
             }
 
-            // print_r($pagesArr);
-
         }
-
+        // If file type is not pdf or epub
         else {
             echo "File type not supported.";
             $pagesArr = [];
@@ -89,11 +87,30 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
 
 <h3>Options</h3>
 <!-- Start at -->
- <div>
-     <label for="hidePages">Start reading at page</label>
-     <input type="number" name="startAtPage" id="">
-     <input type="submit" name="startReading" id="">
- </div>
+<div>
+    <label for="hidePages">Start reading at page</label>
+    <input type="number" name="startAtPage" id="">
+    <input type="submit" name="startReading" id="">
+</div>
+
+<?php 
+// If $_POST['startReading'] then cover entire screen with speed reader display. 
+// if ()
+
+?>
+
+<div class="reading-area">
+    <!-- Reading controls container -->
+    <div class="reading-controls">
+        <!-- Go Back - one word -->
+        <div class="backwards">Back</div>
+        <!-- start/stop -->
+        <div class="start-stop-reading">Start/Stop</div>
+        <!-- Go forward - one word  -->
+        <div class="forward">Forward</div>
+
+    </div>
+</div>
 
 <!-- Display file as text -->
 <?php if($pagesArr) { ?>
@@ -121,7 +138,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
     </div>
 
 <?php } else { ?>
-    <p>Upload your pdf or epub document to begin reading.</p>
+    <p>Upload your pdf or epub document to get started.</p>
 
 <?php } ?>
 
