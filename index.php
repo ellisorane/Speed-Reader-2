@@ -113,18 +113,22 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
         <!-- Reading Speed -->
         <div class="speed">
             <select name="speed" id="">
-                <option value="">100 wpm</option>
-                <option value="">150 wpm</option>
-                <option value="">200 wpm</option>
-                <option value="">250 wpm</option>
-                <option value="">300 wpm</option>
-                <option value="">350 wpm</option>
-                <option value="">400 wpm</option>
+                <option value="">Reading speed - 100 wpm</option>
+                <option value="">Reading speed - 150 wpm</option>
+                <option value="">Reading speed - 200 wpm</option>
+                <option value="">Reading speed - 250 wpm</option>
+                <option value="">Reading speed - 300 wpm</option>
+                <option value="">Reading speed - 350 wpm</option>
+                <option value="">Reading speed - 400 wpm</option>
             </select>
         </div> 
+        <!-- Close Reading area -->
         <div class="close-reading btn">X</div>
+
+        <!-- Word currently being read -->
+        <div class="current-word">This</div>
     </div>
-    
+
 
 </div>
 

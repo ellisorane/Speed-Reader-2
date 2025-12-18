@@ -12,7 +12,6 @@
     width: 100vw;
 }
 
-
 .btn {
   display: inline-flex;
   align-items: center;
@@ -56,4 +55,10 @@
   color: #9ca3af;
   cursor: not-allowed;
   pointer-events: none;
+}
+
+.current-word {
+    font-size: 150px;
+    font-weight: bold;
+
 }
