@@ -2,3 +2,58 @@
     height: 500px;
     overflow: auto;
 }
+
+.reading-area {
+    position: absolute;
+    background-color: grey  ;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+}
+
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 12px 20px;
+  border-radius: 6px;
+
+  background-color: #e5e7eb; /* neutral light gray */
+  color: #111827;            /* near-black text */
+
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+
+  border: 1px solid #d1d5db;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+/* Hover */
+.btn:hover {
+  background-color: #d1d5db;
+}
+
+/* Active (click) */
+.btn:active {
+  background-color: #cbd5e1;
+  transform: translateY(1px);
+}
+
+/* Focus (keyboard accessibility) */
+.btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+}
+
+/* Disabled state */
+.btn.disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+  pointer-events: none;
+}

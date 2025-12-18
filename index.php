@@ -101,14 +101,15 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
 
 <div class="reading-area">
     <h2>Controls</h2>
+
     <!-- Reading controls container -->
     <div class="reading-controls">
         <!-- Go Back - one word -->
-        <div class="backwards">Back</div>
+        <div class="backwards btn">Back</div>
         <!-- start/stop -->
-        <div class="start-stop-reading">Start/Stop</div> 
+        <div class="start-stop-reading btn">Start/Stop</div> 
         <!-- Go forward - one word  -->
-        <div class="forward">Forward</div>
+        <div class="forward btn">Forward</div>
         <!-- Reading Speed -->
         <div class="speed">
             <select name="speed" id="">
@@ -121,8 +122,10 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
                 <option value="">400 wpm</option>
             </select>
         </div> 
-
+        <div class="close-reading btn">X</div>
     </div>
+    
+
 </div>
 
 <!-- Display file as editable text -->
