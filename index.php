@@ -107,14 +107,10 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
 <?php } ?>
 
 
-<?php 
-// If $_POST['startReading'] then cover entire screen with speed reader display. 
-// if ()
-
-?>
-
 
 <div class="reading-area">
+    <!-- .reading-area is hidden until .start reading is pressed -->
+
     <h2>Controls</h2>
 
     <!-- Reading controls container -->
@@ -148,24 +144,6 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
 </div>
 
 
-<script>
-// JS for opening and closing .reading-area
-    const readingArea = document.querySelector('.reading-area');
-    const startReading = document.querySelector('.start-reading');
-    const closeReading = document.querySelector('.close-reading');
-
-
-    startReading.addEventListener('click', () => {
-        console.log('start reading');
-        readingArea.classList.add('reading-area-open');
-    })
-
-    closeReading.addEventListener('click', () => {
-        console.log('close reading');
-        readingArea.classList.remove('reading-area-open');
-    })
-
-</script>
 
 <!-- Display file as editable text -->
 <?php if($pagesArr) { ?>
@@ -195,7 +173,39 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
 <?php } else { ?>
     <p>Upload your pdf or epub document to get started.</p>
 
-<?php } ?>
+<?php } ?>  
+
+
+<script>
+    // JS for opening and closing .reading-area
+    const readingArea = document.querySelector('.reading-area');
+    const startReading = document.querySelector('.start-reading');
+    const closeReading = document.querySelector('.close-reading');
+
+
+    startReading.addEventListener('click', () => {
+        console.log('start reading');
+        readingArea.classList.add('reading-area-open');
+    })
+
+    closeReading.addEventListener('click', () => {
+        console.log('close reading');
+        readingArea.classList.remove('reading-area-open');
+    })
+
+
+    // Store text from file in a JS variable
+    const text = document.querySelector('.textarea').innerHTML;
+    console.log(text);
+
+    // Split text into an array of pages
+    const pages = text.split("<br><br>");
+    console.log(pages);
+
+
+
+</script>
+
 
 <?php include "partials/footer.php"; ?>
 
