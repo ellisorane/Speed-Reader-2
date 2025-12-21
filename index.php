@@ -85,14 +85,27 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
     <input type="submit" name="convert_file" value="Convert file">
 </form>
 
-<h3>Options</h3>
-<!-- Start at -->
-<div>
-    <label for="hidePages">Start reading at page</label>
-    <input type="number" name="startAtPage" id="">
-    <!-- Opens reading interface -->
-    <div class="btn">Start Reading</div>
-</div>
+<?php 
+
+// Only show .options if a file has been successfully uploaded
+// Check if pdf or epub has been uploaded with no errors
+if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLOAD_ERR_OK) {
+
+?>
+
+    <div class="options">
+        <h3>Options</h3>
+        <!-- Start at -->
+        <div>
+            <label for="hidePages">Start reading at page</label>
+            <input type="number" name="startAtPage" id="">
+            <!-- Opens reading interface -->
+            <div class="start-reading btn">Start Reading</div>
+        </div>
+    </div>
+
+<?php } ?>
+
 
 <?php 
 // If $_POST['startReading'] then cover entire screen with speed reader display. 
@@ -136,7 +149,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
 
 
 <script>
-
+// JS for opening and closing .reading-area
     const readingArea = document.querySelector('.reading-area');
     const startReading = document.querySelector('.start-reading');
     const closeReading = document.querySelector('.close-reading');
