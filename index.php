@@ -91,7 +91,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
     <label for="hidePages">Start reading at page</label>
     <input type="number" name="startAtPage" id="">
     <!-- Opens reading interface -->
-    <div class="start-reading btn">Start Reading</div>
+    <div class="btn">Start Reading</div>
 </div>
 
 <?php 
@@ -100,24 +100,6 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
 
 ?>
 
-<script>
-
-    const readingArea = document.querySelector('.reading-area');
-    const startReading = document.querySelector('.start-reading');
-    const closeReading = document.querySelector('.close-reading');
-
-
-    startReading.addEventListener('click', () => {
-        readingArea.classList.add('reading-area-open');
-        console.log('start reading');
-    })
-
-    closeReading.addEventListener('click', () => {
-        readingArea.classList.remove('reading-area-open');
-        consoel.log('close reading');
-    })
-
-</script>
 
 <div class="reading-area">
     <h2>Controls</h2>
@@ -151,6 +133,26 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
 
 
 </div>
+
+
+<script>
+
+    const readingArea = document.querySelector('.reading-area');
+    const startReading = document.querySelector('.start-reading');
+    const closeReading = document.querySelector('.close-reading');
+
+
+    startReading.addEventListener('click', () => {
+        console.log('start reading');
+        readingArea.classList.add('reading-area-open');
+    })
+
+    closeReading.addEventListener('click', () => {
+        console.log('close reading');
+        readingArea.classList.remove('reading-area-open');
+    })
+
+</script>
 
 <!-- Display file as editable text -->
 <?php if($pagesArr) { ?>
