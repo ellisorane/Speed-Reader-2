@@ -6,6 +6,8 @@ class Pdf {
     private $table = 'pdfs';
     public $id;
     public $pdf;
+    public $currentPage;
+    public $currentword;
 
     // Get DB conn
     public function __construct($db) {
