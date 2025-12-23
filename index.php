@@ -6,6 +6,9 @@ include "classes/Pdf.php";
 require 'vendor/autoload.php';
 session_start();
 
+$database = new Database();
+$db = $database->connect();
+
 // $uploaded_file = ''; 
 // $file_path = '';
 $pagesArr = [];
@@ -118,7 +121,7 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
         <!-- Go Back - one word -->
         <div class="backwards btn">Back</div>
         <!-- start/stop -->
-        <div class="start-stop-reading btn">Start/Stop</div> 
+        <div class="start-stop-reading btn" onclick="read()">Start/Stop</div> 
         <!-- Go forward - one word  -->
         <div class="forward btn">Forward</div>
         <!-- Reading Speed -->
@@ -137,7 +140,7 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
         <div class="close-reading btn">X</div>
 
         <!-- Word currently being read -->
-        <div class="current-word">This</div>
+        <div class="current-word"></div>
     </div>
 
 
@@ -160,11 +163,13 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
                     $unclean_text = $page->getText(); 
                     // Only show letters, numbers, punctuation (.,!?), and spaces
                     $text = preg_replace('/[^a-zA-Z0-9 .,!?\-]/', '', $unclean_text);
-                    echo "PAGE-" . $pagesArrIndex . " " . $text . $nl . $nl;
+                    // echo "PAGE-" . $pagesArrIndex . " " . $text . $nl . $nl;
+                    echo $text . $nl . $nl;
                 }
                 // EPUBs
                 elseif ($file_type == 'application/epub+zip') {
-                    echo "PAGE-" . $pagesArrIndex . " " . $page . $nl . $nl;
+                    // echo "PAGE-" . $pagesArrIndex . " " . $page . $nl . $nl;
+                    echo $page . $nl . $nl;
                 }
             }
          ?>
@@ -177,31 +182,73 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
 
 
 <script>
+
     // JS for opening and closing .reading-area
     const readingArea = document.querySelector('.reading-area');
     const startReading = document.querySelector('.start-reading');
     const closeReading = document.querySelector('.close-reading');
+    const currentWordDiv = document.querySelector('.current-word');
 
 
     startReading.addEventListener('click', () => {
-        console.log('start reading');
+        // console.log('start reading');
         readingArea.classList.add('reading-area-open');
     })
 
     closeReading.addEventListener('click', () => {
-        console.log('close reading');
+        // console.log('close reading');
         readingArea.classList.remove('reading-area-open');
     })
 
+    //////////////////////////////////////////////////////////////////////////////////////////////
 
     // Store text from file in a JS variable
     const text = document.querySelector('.textarea').innerHTML;
-    console.log(text);
+    // console.log(text);
 
     // Split text into an array of pages
     const pages = text.split("<br><br>");
-    console.log(pages);
+    // console.log(pages);
 
+    // Get word and word position to display on .reading-area
+    let currentPage = 0;
+    let currentWordPosition = 0;
+
+    // Split current page into an array of words
+    let currentPageArr = pages[currentPage].split(/\s+/);
+    let currentWord;
+
+    console.log(currentPageArr);
+    
+    
+
+    // Read function 
+    let read = () => {
+
+        // Start moving through currentPageArr displaying the words that match the currentWordPosition index and then stop when stop when at the end of page 
+        let reading = setInterval(() => {
+            currentWord = currentPageArr[currentWordPosition];
+            currentWordDiv.innerHTML = currentWord;
+            currentWordPosition ++;
+            console.log('Word index: ' + currentWordPosition);
+
+            // Go to next page once current page is done being read and reset currentWordPosition
+            if(currentWordPosition == currentPageArr.length && currentPage <= pages.length) {
+                currentPage ++;
+                currentWordPosition = 0;
+            } 
+            // Stop interval when at the end of the book. 
+            else if(currentWordPosition == currentPageArr.length && currentPage == pages.length) {
+                clearInterval(reading);
+                console.log("The interval has been stopped.");
+            }
+        }, 100 );
+
+
+        
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
 
 </script>
