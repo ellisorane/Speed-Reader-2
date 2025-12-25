@@ -12,7 +12,7 @@ $db = $database->connect();
 // $uploaded_file = ''; 
 // $file_path = '';
 $pagesArr = [];
-$nl = "\n \n";
+$nl = "<br>";
 
 if($_SERVER['REQUEST_METHOD'] === "POST") {
     
@@ -98,10 +98,7 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
 
     <div class="options">
         <h3>Options</h3>
-        <!-- Start at -->
         <div>
-            <label for="hidePages">Start reading at page</label>
-            <input type="number" name="startAtPage" id="">
             <!-- Opens reading interface -->
             <div class="start-reading btn">Start Reading</div>
         </div>
@@ -163,13 +160,11 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
                     $unclean_text = $page->getText(); 
                     // Only show letters, numbers, punctuation (.,!?), and spaces
                     $text = preg_replace('/[^a-zA-Z0-9 .,!?\-]/', '', $unclean_text);
-                    // echo "PAGE-" . $pagesArrIndex . " " . $text . $nl . $nl;
-                    echo $text . $nl . $nl;
+                    echo $text;
                 }
                 // EPUBs
                 elseif ($file_type == 'application/epub+zip') {
-                    // echo "PAGE-" . $pagesArrIndex . " " . $page . $nl . $nl;
-                    echo $page . $nl . $nl;
+                    echo $page;
                 }
             }
          ?>
@@ -206,55 +201,33 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
     const text = document.querySelector('.textarea').innerHTML; 
     // console.log(text);
 
-    // Split text into an array of pages
-    const pages = text.split("<br><br>");
-    // const pages = text.split("<br><br>");
-    console.log(pages);
+    // Split text into an array of words
+    let textArr = text.trim().split(/\s+/);
+    console.log(textArr);
+
 
     // Get word and word position to display on .reading-area
-    let currentPageIndex = 0;
     let currentWordIndex = 0;
-
-    // Split current page into an array of words
-    // let currentPageArr = pages[currentPage].split(/\s+/);
-    let currentPageArr;
     let currentWord;
-
-    // console.log(currentPageArr);
-    
-    
 
     // Read function 
     let read = () => {
 
-        currentPageIndex = 0;
-        currentWordIndex = 0;
+        // currentWordIndex = 0;
 
-
-        // Start moving through currentPageArr displaying the words that match the currentWordIndex index and then stop when stop when at the end of page 
+        // Start moving through textArr displaying the words that match the currentWordIndex index 
         let reading = setInterval(() => {
-            currentPageArr = pages[currentPageIndex].trim().split(/\s+/);
-            console.log(currentPageArr);
-            currentWord = currentPageArr[currentWordIndex];
+
+            currentWord = textArr[currentWordIndex];
             currentWordDiv.innerHTML = currentWord;
             currentWordIndex ++;
-            // console.log('Word index: ' + currentWordIndex);
 
             
-            // Go to next page once current page is done being read and reset currentWordIndex
-            if(currentWordIndex >= currentPageArr.length - 1 && currentPageIndex < pages.length - 1) {
-                console.log("Page Index: " + currentPageIndex);
-                currentWordIndex = 0;
-                currentPageIndex ++;
-
-            } 
             // Stop interval when at the end of the book. 
-            if(currentWordIndex >= currentPageArr.length - 1 && currentPageIndex >= pages.length - 1) {
-
+            if(currentWordIndex >= textArr.length - 1) {
                 clearInterval(reading);
-                console.log("The interval has been stopped.");
-                currentPageIndex = pages.length - 1;
-                currentWordIndex = currentPageArr.length - 1;
+                console.log("The end.");
+                currentWordIndex = textArr.length - 1;
                 console.log("Last word: " + currentWord + " - " + currentWordIndex);
                 console.log("next word: " + currentWord + " - " + (currentWordIndex + 1));
                 currentWordDiv.innerHTML = currentWord;
