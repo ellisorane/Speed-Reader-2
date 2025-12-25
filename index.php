@@ -199,44 +199,59 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
 
     // Store text from file in a JS variable
     const text = document.querySelector('.textarea').innerHTML; 
-    // console.log(text);
 
     // Split text into an array of words
     let textArr = text.trim().split(/\s+/);
     console.log(textArr);
 
-
     // Get word and word position to display on .reading-area
     let currentWordIndex = 0;
-    let currentWord;
+    let currentWord = textArr[currentWordIndex];
 
-    // Read function 
+    // Display currentWord as the first word in the text
+    currentWordDiv.innerHTML = currentWord;
+
+    // Reading status - PAUSED or READING
+    let readingStatus = "PAUSED";
+
+    // Used to manage setInterval in read()
+    let reading;
+
+
+    // Start and Stop Reading function 
     let read = () => {
 
-        // currentWordIndex = 0;
+        if(readingStatus === "PAUSED") {
+            readingStatus = "READING";
 
-        // Start moving through textArr displaying the words that match the currentWordIndex index 
-        let reading = setInterval(() => {
-
-            currentWord = textArr[currentWordIndex];
-            currentWordDiv.innerHTML = currentWord;
-            currentWordIndex ++;
-
-            
-            // Stop interval when at the end of the book. 
-            if(currentWordIndex >= textArr.length - 1) {
-                clearInterval(reading);
-                console.log("The end.");
-                currentWordIndex = textArr.length - 1;
-                console.log("Last word: " + currentWord + " - " + currentWordIndex);
-                console.log("next word: " + currentWord + " - " + (currentWordIndex + 1));
+            // Start moving through textArr displaying the words that match the currentWordIndex index 
+            reading = setInterval(() => {
+                currentWord = textArr[currentWordIndex];
                 currentWordDiv.innerHTML = currentWord;
-            }
-        }, 10 );
+                currentWordIndex ++;
+                
+                // Stop interval when at the end of the book. 
+                if(currentWordIndex >= textArr.length) {
+                    clearInterval(reading);
+                    readingStatus = "PAUSED";
+                    console.log("The end.");
+                    currentWordIndex = textArr.length;
+                    console.log("Last word: " + currentWord + " - " + currentWordIndex);
+                    currentWordDiv.innerHTML = currentWord;
+                }
+                
+                
+                return currentWordIndex;
+            }, 500 );
 
-
-        
+        // Pause reading if it's already running
+        } else if (readingStatus === "READING") {
+            readingStatus = "PAUSED";
+            clearInterval(reading);
+        } 
+             
     }
+    
 
     /////////////////////////////////////////////////////////////////////////////////////////////
 
