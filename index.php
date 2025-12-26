@@ -116,11 +116,11 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
     <!-- Reading controls container -->
     <div class="reading-controls">
         <!-- Go Back - one word -->
-        <div class="backwards btn" onclick="backward()">Back</div>
+        <div class="backwards btn" onclick="skip('-')">Back</div>
         <!-- start/stop -->
         <div class="start-stop-reading btn" onclick="read()">Start/Stop</div> 
         <!-- Go forward - one word  -->
-        <div class="forward btn" onclick="forward()">Forward</div>
+        <div class="forward btn" onclick="skip('+')">Forward</div>
         <!-- Reading Speed -->
         <div class="speed">
             <select name="speed" id="">
@@ -257,35 +257,28 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
              
     }
 
-    let backward = () => {
+    // Skip forward or backward one word based on parameter + or -
+    let skip = (direction) => {
         currentWord = textArr[currentWordIndex];
-        // Go to previous word if currentWordIndex is greater than 0 
-        if(currentWordIndex > 0) {
+        if(currentWordIndex > 0 && direction === "-") {
             currentWordIndex --;
-            console.log(currentWordIndex);
-            console.log("backwards");
         }
-        if (readingStatus === "READING") {
-            pauseReading();
-        } 
-        currentWordDiv.innerHTML = currentWord;
-    }
-
-    let forward = () => {
-        currentWord = textArr[currentWordIndex];
-        // Go to next word if currentWordIndex is less than the length of the textArr 
-        if(currentWordIndex < textArr.length) {
+        if(currentWordIndex < textArr.length && direction === "+") {
             currentWordIndex ++;
-            console.log(currentWordIndex);
-            console.log("forward");
         }
         if (readingStatus === "READING") {
             pauseReading();
         } 
         currentWordDiv.innerHTML = currentWord;
+        
     }
 
-    
+
+    // Reading Speed
+    let speed = () => {
+
+    }
+
     
 
     /////////////////////////////////////////////////////////////////////////////////////////////
