@@ -116,11 +116,11 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
     <!-- Reading controls container -->
     <div class="reading-controls">
         <!-- Go Back - one word -->
-        <div class="backwards btn" onclick="backwards()">Back</div>
+        <div class="backwards btn" onclick="backward()">Back</div>
         <!-- start/stop -->
         <div class="start-stop-reading btn" onclick="read()">Start/Stop</div> 
         <!-- Go forward - one word  -->
-        <div class="forward btn">Forward</div>
+        <div class="forward btn" onclick="forward()">Forward</div>
         <!-- Reading Speed -->
         <div class="speed">
             <select name="speed" id="">
@@ -257,7 +257,7 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
              
     }
 
-    let backwards = () => {
+    let backward = () => {
         currentWord = textArr[currentWordIndex];
         // Go to previous word if currentWordIndex is greater than 0 
         if(currentWordIndex > 0) {
@@ -270,6 +270,22 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
         } 
         currentWordDiv.innerHTML = currentWord;
     }
+
+    let forward = () => {
+        currentWord = textArr[currentWordIndex];
+        // Go to next word if currentWordIndex is less than the length of the textArr 
+        if(currentWordIndex < textArr.length) {
+            currentWordIndex ++;
+            console.log(currentWordIndex);
+            console.log("forward");
+        }
+        if (readingStatus === "READING") {
+            pauseReading();
+        } 
+        currentWordDiv.innerHTML = currentWord;
+    }
+
+    
     
 
     /////////////////////////////////////////////////////////////////////////////////////////////
