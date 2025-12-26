@@ -116,7 +116,7 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
     <!-- Reading controls container -->
     <div class="reading-controls">
         <!-- Go Back - one word -->
-        <div class="backwards btn">Back</div>
+        <div class="backwards btn" onclick="backwards()">Back</div>
         <!-- start/stop -->
         <div class="start-stop-reading btn" onclick="read()">Start/Stop</div> 
         <!-- Go forward - one word  -->
@@ -200,7 +200,7 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
     // Store text from file in a JS variable
     const text = document.querySelector('.textarea').innerHTML; 
 
-    // Split text into an array of words
+    // Split text into an array of words and remove spaces at beginning and end of text
     let textArr = text.trim().split(/\s+/);
     console.log(textArr);
 
@@ -216,6 +216,12 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
 
     // Used to manage setInterval in read()
     let reading;
+
+    // Pause reading
+    let pauseReading = () => {
+        readingStatus = "PAUSED";
+        clearInterval(reading);
+    }
 
 
     // Start and Stop Reading function 
@@ -242,14 +248,27 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
                 
                 
                 return currentWordIndex;
-            }, 500 );
+            }, 250);
 
         // Pause reading if it's already running
         } else if (readingStatus === "READING") {
-            readingStatus = "PAUSED";
-            clearInterval(reading);
+            pauseReading();
         } 
              
+    }
+
+    let backwards = () => {
+        currentWord = textArr[currentWordIndex];
+        // Go to previous word if currentWordIndex is greater than 0 
+        if(currentWordIndex > 0) {
+            currentWordIndex --;
+            console.log(currentWordIndex);
+            console.log("backwards");
+        }
+        if (readingStatus === "READING") {
+            pauseReading();
+        } 
+        currentWordDiv.innerHTML = currentWord;
     }
     
 
