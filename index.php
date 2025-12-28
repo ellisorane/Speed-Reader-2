@@ -306,7 +306,21 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
         skip("-");
     });
 
-    // Selecting starting word from Converted text section
+    // Event Listner - Select starting word from Converted text section
+    textarea.addEventListener('click', () => {
+        const selection = window.getSelection();
+        if (!selection || selection.rangeCount === 0) return;
+
+        // Extend the selection to word boundaries
+        selection.modify('move', 'backward', 'word');
+        selection.modify('extend', 'forward', 'word');
+
+        // Get selected text
+        let selectedText = selection.toString();
+        console.log(selectedText);
+
+        // Array of text in selection area - Find index of selectedText and update currentWordIndex to match that of the selectedText.
+    });
 
     // Editing Converted text
 
