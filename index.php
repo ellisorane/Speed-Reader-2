@@ -116,21 +116,25 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
     <!-- Reading controls container -->
     <div class="reading-controls">
         <!-- Go Back - one word -->
-        <div class="backwards btn" onclick="skip('-')">Back</div>
+        <div class="backward btn">Back</div>
         <!-- start/stop -->
-        <div class="start-stop-reading btn" onclick="read()">Start/Stop</div> 
+        <div class="start-stop-reading btn">Start/Stop</div> 
         <!-- Go forward - one word  -->
-        <div class="forward btn" onclick="skip('+')">Forward</div>
+        <div class="forward btn" onclick="">Forward</div>
         <!-- Reading Speed -->
         <div class="speed">
-            <select name="speed" id="">
-                <option value="">Reading speed - 100 wpm</option>
-                <option value="">Reading speed - 150 wpm</option>
-                <option value="">Reading speed - 200 wpm</option>
-                <option value="">Reading speed - 250 wpm</option>
-                <option value="">Reading speed - 300 wpm</option>
-                <option value="">Reading speed - 350 wpm</option>
-                <option value="">Reading speed - 400 wpm</option>
+            <label for="speed">Reading Speed</label>
+            <select name="speed" id="speed">
+                <option value="1000">60 wpm - 1 words per sec</option>
+                <option value="598">100 wpm - 1.67 words per sec</option>
+                <option value="500">120 wpm - 2 words per sec</option>
+                <option value="400">150 wpm - 2.5 words per sec</option>
+                <option value="300" selected>200 wpm - 3.33 words per sec</option>
+                <option value="240">250 wpm - 4.17 words per sec</option>
+                <option value="200">300 wpm - 5 words per sec</option>
+                <option value="172">350 wpm - 5.83 words per sec</option>
+                <option value="150">400 wpm - 6.67 words per sec</option>
+                <option value="133">450 wpm - 7.5 words per sec</option>
             </select>
         </div> 
         <!-- Close Reading area -->
@@ -185,13 +189,13 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
     const textarea = document.querySelector('.textarea')
     const currentWordDiv = document.querySelector('.current-word');
 
+    // Event listner - open reading interface
     startReading.addEventListener('click', () => {
-        // console.log('start reading');
         readingArea.classList.add('reading-area-open');
     })
 
+    // Event listner - close reading interface
     closeReading.addEventListener('click', () => {
-        // console.log('close reading');
         readingArea.classList.remove('reading-area-open');
     })
 
@@ -223,10 +227,27 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
         clearInterval(reading);
     }
 
+    // Reading speed. Value is used to set the timing for setInterval in read()
+    // 60 wpm - 1 word per sec = 1000 ms
+    // 100 wpm - 1.67 word per sec =  1000/1.67 = 598 ms
+    // 120 wpm - 2 word per sec = 1000/2 = 500 ms
+    // 150 wpm - 2.5 word per sec = 1000/2.5 = 400 ms
+    // 200 wpm - 3.33 word per sec = 1000/3.33 = 300 ms (default)
+    // 250 wpm - 4.17 word per sec = 1000/4.17 = 240 ms
+    // 300 wpm - 5 word per sec = 1000/5 = 200 ms
+    // 350 wpm - 5.83 word per sec = 1000/5.83 = 172 ms
+    // 400 wpm - 6.67 word per sec = 1000/6.67 = 150 ms
+    // 450 wpm - 7.5 word per sec = 1000/7.5 = 133 ms
+    let speed = 300;
 
-    // Start and Stop Reading function 
-    let read = () => {
+    // Event listner - Update reading speeding when <select> is changed
+    document.querySelector("#speed").addEventListener('change', (e) => {
+        speed = e.target.value;
+        pauseReading();
+    })
 
+    // Start and Stop Reading. Also speed of reading
+    let read = (speed) => {
         if(readingStatus === "PAUSED") {
             readingStatus = "READING";
 
@@ -240,24 +261,27 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
                 if(currentWordIndex >= textArr.length) {
                     clearInterval(reading);
                     readingStatus = "PAUSED";
-                    console.log("The end.");
                     currentWordIndex = textArr.length;
-                    console.log("Last word: " + currentWord + " - " + currentWordIndex);
                     currentWordDiv.innerHTML = currentWord;
                 }
                 
-                
                 return currentWordIndex;
-            }, 250);
 
-        // Pause reading if it's already running
+               
+            }, speed);
+
+        // Start/stop - Pause reading if it's already running
         } else if (readingStatus === "READING") {
             pauseReading();
         } 
-             
     }
 
-    // Skip forward or backward one word based on parameter + or -
+    // Event listner - start/stop reading
+    document.querySelector('.start-stop-reading').addEventListener('click', () => {
+        read(speed);
+    });
+
+    // Skip forward or backward one word based on direction parameter (+ or -)
     let skip = (direction) => {
         currentWord = textArr[currentWordIndex];
         if(currentWordIndex > 0 && direction === "-") {
@@ -270,14 +294,23 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
             pauseReading();
         } 
         currentWordDiv.innerHTML = currentWord;
-        
     }
 
+    // Event listner - skip forward by 1 word
+    document.querySelector('.forward').addEventListener('click', () => {
+        skip("+");
+    });
 
-    // Reading Speed
-    let speed = () => {
+    // Event listner - go backward by 1 word
+    document.querySelector('.backward').addEventListener('click', () => {
+        skip("-");
+    });
 
-    }
+    // Selecting starting word from Converted text section
+
+    // Editing Converted text
+
+    // Pasting text to read instead of uploading file
 
     
 
