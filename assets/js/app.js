@@ -15,14 +15,13 @@ closeReading.addEventListener('click', () => {
 	readingArea.classList.remove('reading-area-open')
 })
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-
 // Store text from file in a JS variable
 const text = document.querySelector('.textarea').innerHTML
 
+
 // Split text into an array of words and remove spaces at beginning and end of text
 let textArr = text.trim().split(/\s+/)
-console.log(textArr)
+// console.log(textArr)
 
 // Get word and word position to display on .reading-area
 let currentWordIndex = 0
@@ -118,22 +117,6 @@ document.querySelector('.forward').addEventListener('click', () => {
 // Event listner - go backward by 1 word
 document.querySelector('.backward').addEventListener('click', () => {
 	skip('-')
-})
-
-// Event Listner - Select starting word from Converted text section
-textarea.addEventListener('click', () => {
-	const selection = window.getSelection()
-	if (!selection || selection.rangeCount === 0) return
-
-	// Extend the selection to word boundaries
-	selection.modify('move', 'backward', 'word')
-	selection.modify('extend', 'forward', 'word')
-
-	// Get selected text
-	let selectedText = selection.toString()
-	console.log(selectedText)
-
-	// Array of text in selection area - Find index of selectedText and update currentWordIndex to match that of the selectedText.
 })
 
 // Editing Converted text

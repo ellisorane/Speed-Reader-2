@@ -72,14 +72,12 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
             $pagesArr = [];
         }
 
-
     }
-
 
 }
 ?>
 
-<h1>Speed Reader 2</h1>
+<h1>Speed Readergit </h1>
 
 <!-- Upload file to convert to text -->
 <form action="" method="post" enctype="multipart/form-data">
@@ -147,8 +145,6 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
 
 </div>
 
-
-
 <!-- Display file as editable text -->
 <?php if($pagesArr) { ?>
 
@@ -178,6 +174,9 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
     <p>Upload your pdf or epub document to get started.</p>
 
 <?php } ?>  
+
+
+
 
 
 
