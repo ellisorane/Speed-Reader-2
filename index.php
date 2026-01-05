@@ -77,7 +77,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
 }
 ?>
 
-<h1>Speed Readergit </h1>
+<h1>Speed Reader</h1>
 
 <!-- Upload file to convert to text -->
 <form action="" method="post" enctype="multipart/form-data">

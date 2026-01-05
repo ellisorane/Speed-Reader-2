@@ -5,8 +5,34 @@ const closeReading = document.querySelector('.close-reading')
 const textarea = document.querySelector('.textarea')
 const currentWordDiv = document.querySelector('.current-word')
 
+
+// Store text from file in a JS variable
+// Split text into an array of words and remove spaces at beginning and end of text
+let text
+let textArr
+
+// Get word and word position to display on .reading-area
+let currentWordIndex = 0
+let currentWord
+
+let transformTextToArr = (text) => {
+	currentWordIndex = 0
+	text = document.querySelector('.textarea').innerHTML
+	textArr = text.trim().split(/\s+/)
+	currentWord = textArr[currentWordIndex]
+	// Display currentWord as the first word in the text
+	currentWordDiv.innerHTML = currentWord
+	console.log(textArr)
+}
+
+// Event Listner - Editing Converted text
+textarea.addEventListener('keyup', () => {
+	transformTextToArr(text);
+})
+
 // Event listner - open reading interface
 startReading.addEventListener('click', () => {
+	transformTextToArr(text)
 	readingArea.classList.add('reading-area-open')
 })
 
@@ -14,21 +40,6 @@ startReading.addEventListener('click', () => {
 closeReading.addEventListener('click', () => {
 	readingArea.classList.remove('reading-area-open')
 })
-
-// Store text from file in a JS variable
-const text = document.querySelector('.textarea').innerHTML
-
-
-// Split text into an array of words and remove spaces at beginning and end of text
-let textArr = text.trim().split(/\s+/)
-// console.log(textArr)
-
-// Get word and word position to display on .reading-area
-let currentWordIndex = 0
-let currentWord = textArr[currentWordIndex]
-
-// Display currentWord as the first word in the text
-currentWordDiv.innerHTML = currentWord
 
 // Reading status - PAUSED or READING
 let readingStatus = 'PAUSED'
@@ -119,7 +130,7 @@ document.querySelector('.backward').addEventListener('click', () => {
 	skip('-')
 })
 
-// Editing Converted text
+
 
 // Pasting text to read instead of uploading file
 
