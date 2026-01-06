@@ -171,11 +171,11 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
     </div>
 
 <?php } else { ?>
-    <p>Upload your pdf or epub document to get started or paste/type your text below.</p>
+    <p>Upload your pdf or epub document to get started or add your text below.</p>
     <!-- Paste Text -->
     <form action="">
-        <label for="">Add Your Text Here</label>
-        <textarea name="text" id="text"></textarea>
+        <label for=""></label>
+        <textarea name="text" id="text" class="paste-textarea" placeholder="Paste or Type Your Text Here"></textarea><br>
         <input type="submit" value="Save" name="submit-text">
     </form>
 <?php } ?>  

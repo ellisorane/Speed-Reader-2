@@ -4,11 +4,13 @@ const startReading = document.querySelector('.start-reading')
 const closeReading = document.querySelector('.close-reading')
 const textarea = document.querySelector('.textarea')
 const currentWordDiv = document.querySelector('.current-word')
+const pasteTextarea = document.querySelector('.paste-textarea')
+
 
 
 // Store text from file in a JS variable
-// Split text into an array of words and remove spaces at beginning and end of text
 let text
+// Split text into an array of words and remove spaces at beginning and end of text
 let textArr
 
 // Get word and word position to display on .reading-area
@@ -17,29 +19,14 @@ let currentWord
 
 let transformTextToArr = (text) => {
 	currentWordIndex = 0
-	text = document.querySelector('.textarea').innerHTML
+	if (textarea) text = textarea.innerHTML
+	if(pasteTextarea) text = pasteTextarea.value
 	textArr = text.trim().split(/\s+/)
 	currentWord = textArr[currentWordIndex]
 	// Display currentWord as the first word in the text
 	currentWordDiv.innerHTML = currentWord
 	console.log(textArr)
 }
-
-// Event Listner - Editing Converted text
-textarea.addEventListener('keyup', () => {
-	transformTextToArr(text);
-})
-
-// Event listner - open reading interface
-startReading.addEventListener('click', () => {
-	transformTextToArr(text)
-	readingArea.classList.add('reading-area-open')
-})
-
-// Event listner - close reading interface
-closeReading.addEventListener('click', () => {
-	readingArea.classList.remove('reading-area-open')
-})
 
 // Reading status - PAUSED or READING
 let readingStatus = 'PAUSED'
@@ -52,6 +39,35 @@ let pauseReading = () => {
 	readingStatus = 'PAUSED'
 	clearInterval(reading)
 }
+
+// Pasting/typing text to read instead of uploading file
+if (pasteTextarea) {
+	pasteTextarea.addEventListener('keyup', () => {
+		console.log("Text: " + pasteTextarea.value)
+		transformTextToArr(text)
+	})
+}
+
+// Event Listner - Editing Converted text
+if (textarea) {	
+	textarea.addEventListener('keyup', () => {
+		transformTextToArr(text);
+	})
+}
+
+// Event listner - open reading interface
+if (startReading) {	
+	startReading.addEventListener('click', () => {
+		transformTextToArr(text)
+		readingArea.classList.add('reading-area-open')
+	})
+}
+
+// Event listner - close reading interface
+closeReading.addEventListener('click', () => {
+	readingArea.classList.remove('reading-area-open')
+	pauseReading()
+})
 
 // Reading speed. Value is used to set the timing for setInterval in read()
 // 60 wpm - 1 word per sec = 1000 ms
@@ -131,7 +147,5 @@ document.querySelector('.backward').addEventListener('click', () => {
 })
 
 
-
-// Pasting text to read instead of uploading file
 
 /////////////////////////////////////////////////////////////////////////////////////////////
