@@ -15,6 +15,10 @@ $pagesArr = [];
 $nl = "<br>";
 
 if($_SERVER['REQUEST_METHOD'] === "POST") {
+
+    if(isset($_POST['save-text'])) {
+        $_SESSION['save_text'] = true;
+    }
     
     if(isset($_POST['convert_file'])) {
         $file_type = '';
@@ -82,17 +86,15 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
 <!-- Upload file to convert to text -->
 <form action="" method="post" enctype="multipart/form-data">
     <label for="file"><strong>Add a doc</strong></label><br><br>
-    <input type="file" name="uploaded_file" id="uploaded_file" name="uploaded_file"><br><br>
-    <input type="submit" name="convert_file" value="Convert file">
+    <input class="" type="file" name="uploaded_file" id="uploaded_file" name="uploaded_file"><br><br>
+    <input class="btn" type="submit" name="convert_file" value="Convert file">
 </form><br>
 
 <?php 
 
 // Only show .options if a file has been successfully uploaded
 // Check if pdf or epub has been uploaded with no errors
-if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLOAD_ERR_OK) {
-
-?>
+if ((isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLOAD_ERR_OK) || isset($_SESSION['save_text'])) {?>
 
     <div class="options">
         <h3>Options</h3>
@@ -173,13 +175,12 @@ if (isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLO
 <?php } else { ?>
     <p>Upload your pdf or epub document to get started or add your text below.</p>
     <!-- Paste Text -->
-    <form action="">
+    <form method="POST">
         <label for=""></label>
         <textarea name="text" id="text" class="paste-textarea" placeholder="Paste or Type Your Text Here"></textarea><br>
-        <input type="submit" value="Save" name="submit-text">
+        <input class="btn" type="submit" value="Save" name="save-text">
     </form>
 <?php } ?>  
-
 
 
 
