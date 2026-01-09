@@ -92,24 +92,6 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
         <input class="btn" type="submit" name="convert_file" value="Convert file">
     </form><br>
 
-    <?php 
-
-    // Only show .options if a file has been successfully uploaded
-    // Check if pdf or epub has been uploaded with no errors
-    if ((isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLOAD_ERR_OK) || isset($_SESSION['save_text'])) {?>
-
-    <div class="options">
-            <h3>Options</h3>
-            <div>
-                <!-- Opens reading interface -->
-                <div class="start-reading btn">Start Reading</div>
-            </div>
-        </div>
-        
-    <?php } ?>
-
-
-
     <div class="reading-area">
         <!-- .reading-area is hidden until .start reading is pressed -->
         
@@ -174,7 +156,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
                 ?>
         </div>
 
-    <?php } else { ?>
+        <?php } else { ?>
         <p>Upload your pdf or epub document to get started or add your text below.</p>
         <!-- Paste Text -->
         <form method="POST">
@@ -182,7 +164,18 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
             <textarea name="text" id="text" class="paste-textarea" placeholder="Paste or Type Your Text Here"></textarea><br>
             <input class="btn" type="submit" value="Save" name="save-text">
         </form>
-        <?php } ?>  
+    <?php } ?>  
+
+
+    <div class="options">
+        <h3>Options</h3>
+        <div>
+            <!-- Opens reading interface -->
+            <div class="start-reading btn">Start Reading</div>
+        </div>
+    </div>
+
+
     
     
 </div>
