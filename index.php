@@ -81,110 +81,113 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
 }
 ?>
 
-<h1>Speed Reader</h1>
+<div class="container">
 
-<!-- Upload file to convert to text -->
-<form action="" method="post" enctype="multipart/form-data">
-    <label for="file"><strong>Add a doc</strong></label><br><br>
-    <input class="" type="file" name="uploaded_file" id="uploaded_file" name="uploaded_file"><br><br>
-    <input class="btn" type="submit" name="convert_file" value="Convert file">
-</form><br>
+    <h1>Speed Reader</h1>
+    
+    <!-- Upload file to convert to text -->
+    <form action="" method="post" enctype="multipart/form-data">
+        <label for="file"><strong>Add a doc</strong></label><br><br>
+        <input class="" type="file" name="uploaded_file" id="uploaded_file" name="uploaded_file"><br><br>
+        <input class="btn" type="submit" name="convert_file" value="Convert file">
+    </form><br>
 
-<?php 
+    <?php 
 
-// Only show .options if a file has been successfully uploaded
-// Check if pdf or epub has been uploaded with no errors
-if ((isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLOAD_ERR_OK) || isset($_SESSION['save_text'])) {?>
+    // Only show .options if a file has been successfully uploaded
+    // Check if pdf or epub has been uploaded with no errors
+    if ((isset($_FILES['uploaded_file']) && $_FILES['uploaded_file']['error'] == UPLOAD_ERR_OK) || isset($_SESSION['save_text'])) {?>
 
     <div class="options">
-        <h3>Options</h3>
-        <div>
-            <!-- Opens reading interface -->
-            <div class="start-reading btn">Start Reading</div>
+            <h3>Options</h3>
+            <div>
+                <!-- Opens reading interface -->
+                <div class="start-reading btn">Start Reading</div>
+            </div>
         </div>
+        
+    <?php } ?>
+
+
+
+    <div class="reading-area">
+        <!-- .reading-area is hidden until .start reading is pressed -->
+        
+        <h2>Controls</h2>
+        
+        <!-- Reading controls container -->
+        <div class="reading-controls">
+            <!-- Go Back - one word -->
+            <div class="backward btn">Back</div>
+            <!-- start/stop -->
+            <div class="start-stop-reading btn">Start/Stop</div> 
+            <!-- Go forward - one word  -->
+            <div class="forward btn" onclick="">Forward</div>
+            <!-- Reading Speed -->
+            <div class="speed">
+                <label for="speed">Reading Speed</label>
+                <select name="speed" id="speed">
+                    <option value="1000">60 wpm - 1 words per sec</option>
+                    <option value="598">100 wpm - 1.67 words per sec</option>
+                    <option value="500">120 wpm - 2 words per sec</option>
+                    <option value="400">150 wpm - 2.5 words per sec</option>
+                    <option value="300" selected>200 wpm - 3.33 words per sec</option>
+                    <option value="240">250 wpm - 4.17 words per sec</option>
+                    <option value="200">300 wpm - 5 words per sec</option>
+                    <option value="172">350 wpm - 5.83 words per sec</option>
+                    <option value="150">400 wpm - 6.67 words per sec</option>
+                    <option value="133">450 wpm - 7.5 words per sec</option>
+                </select>
+            </div> 
+            <!-- Close Reading area -->
+            <div class="close-reading btn">X</div>
+
+            <!-- Word currently being read -->
+            <div class="current-word"></div>
+        </div>
+
+
     </div>
 
-<?php } ?>
+    <!-- Display file as editable text -->
+    <?php if($pagesArr) { ?>
+        
+        <h2>Converted Text</h2>
+        <div class='textarea' contenteditable>
+            <?php 
+                $pagesArrIndex = 0;
+                
+                foreach($pagesArr as $page) {
+                    $pagesArrIndex++;
+                    // PDFs
+                    if ($file_type === 'application/pdf') {
+                        $unclean_text = $page->getText(); 
+                        // Only show letters, numbers, punctuation (.,!?), and spaces
+                        $text = preg_replace('/[^a-zA-Z0-9 .,!?\-]/', '', $unclean_text);
+                        echo $text;
+                    }
+                    // EPUBs
+                    elseif ($file_type == 'application/epub+zip') {
+                        echo $page;
+                    }
+                }
+                ?>
+        </div>
 
-
-
-<div class="reading-area">
-    <!-- .reading-area is hidden until .start reading is pressed -->
-
-    <h2>Controls</h2>
-
-    <!-- Reading controls container -->
-    <div class="reading-controls">
-        <!-- Go Back - one word -->
-        <div class="backward btn">Back</div>
-        <!-- start/stop -->
-        <div class="start-stop-reading btn">Start/Stop</div> 
-        <!-- Go forward - one word  -->
-        <div class="forward btn" onclick="">Forward</div>
-        <!-- Reading Speed -->
-        <div class="speed">
-            <label for="speed">Reading Speed</label>
-            <select name="speed" id="speed">
-                <option value="1000">60 wpm - 1 words per sec</option>
-                <option value="598">100 wpm - 1.67 words per sec</option>
-                <option value="500">120 wpm - 2 words per sec</option>
-                <option value="400">150 wpm - 2.5 words per sec</option>
-                <option value="300" selected>200 wpm - 3.33 words per sec</option>
-                <option value="240">250 wpm - 4.17 words per sec</option>
-                <option value="200">300 wpm - 5 words per sec</option>
-                <option value="172">350 wpm - 5.83 words per sec</option>
-                <option value="150">400 wpm - 6.67 words per sec</option>
-                <option value="133">450 wpm - 7.5 words per sec</option>
-            </select>
-        </div> 
-        <!-- Close Reading area -->
-        <div class="close-reading btn">X</div>
-
-        <!-- Word currently being read -->
-        <div class="current-word"></div>
-    </div>
-
-
+    <?php } else { ?>
+        <p>Upload your pdf or epub document to get started or add your text below.</p>
+        <!-- Paste Text -->
+        <form method="POST">
+            <label for=""></label>
+            <textarea name="text" id="text" class="paste-textarea" placeholder="Paste or Type Your Text Here"></textarea><br>
+            <input class="btn" type="submit" value="Save" name="save-text">
+        </form>
+        <?php } ?>  
+    
+    
 </div>
-
-<!-- Display file as editable text -->
-<?php if($pagesArr) { ?>
-
-    <h2>Converted Text</h2>
-    <div class='textarea' contenteditable>
-        <?php 
-            $pagesArrIndex = 0;
-
-            foreach($pagesArr as $page) {
-                $pagesArrIndex++;
-                // PDFs
-                if ($file_type === 'application/pdf') {
-                    $unclean_text = $page->getText(); 
-                    // Only show letters, numbers, punctuation (.,!?), and spaces
-                    $text = preg_replace('/[^a-zA-Z0-9 .,!?\-]/', '', $unclean_text);
-                    echo $text;
-                }
-                // EPUBs
-                elseif ($file_type == 'application/epub+zip') {
-                    echo $page;
-                }
-            }
-         ?>
-    </div>
-
-<?php } else { ?>
-    <p>Upload your pdf or epub document to get started or add your text below.</p>
-    <!-- Paste Text -->
-    <form method="POST">
-        <label for=""></label>
-        <textarea name="text" id="text" class="paste-textarea" placeholder="Paste or Type Your Text Here"></textarea><br>
-        <input class="btn" type="submit" value="Save" name="save-text">
-    </form>
-<?php } ?>  
-
-
-
-
+    
+    
 
 
 <?php include "partials/footer.php"; ?>
