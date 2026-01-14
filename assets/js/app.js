@@ -1,6 +1,7 @@
 // JS for opening and closing .reading-area
 const readingArea = document.querySelector('.reading-area')
 const startReading = document.querySelector('.start-reading')
+const clearAll = document.querySelector('.clear-all')
 const closeReading = document.querySelector('.close-reading')
 const textarea = document.querySelector('.textarea')
 const currentWordDiv = document.querySelector('.current-word')
@@ -56,12 +57,20 @@ if (textarea) {
 }
 
 // Event listner - open reading interface
-if (startReading) {	
-	startReading.addEventListener('click', () => {
-		transformTextToArr(text)
-		readingArea.classList.add('reading-area-open')
-	})
-}
+startReading.addEventListener('click', () => {
+	transformTextToArr(text)
+	readingArea.classList.add('reading-area-open')
+})
+
+// Event listner - Remove uploaded file info or any pasted/typed text
+clearAll.addEventListener('click', () => {
+	console.log('clicked clear all')
+	// Clear converted text area
+	textarea.innerHTML = "";
+	// Clear pasted/typed text area
+	
+
+})
 
 // Event listner - close reading interface
 closeReading.addEventListener('click', () => {

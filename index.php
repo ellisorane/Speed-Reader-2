@@ -172,6 +172,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST") {
         <div>
             <!-- Opens reading interface -->
             <div class="start-reading btn">Start Reading</div>
+            <div class="clear-all btn">Clear All</div>
         </div>
     </div>
 
